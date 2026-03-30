@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Read(//private/tmp/**)",
+      "Bash(rm -rf cnb-cards-temp)",
+      "Bash(cp /tmp/cnb-cards-temp/index.html /tmp/cnb-cards-temp/vite.config.js /tmp/cnb-cards-temp/eslint.config.js /Users/dragos/Code/Personal/cnb-cards/)",
+      "Bash(cp -r /tmp/cnb-cards-temp/src /Users/dragos/Code/Personal/cnb-cards/)",
+      "Bash(cp -r /tmp/cnb-cards-temp/public /Users/dragos/Code/Personal/cnb-cards/)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(curl -s 'https://21st.dev/community/components/kokonutd/beams-background/default')",
+      "WebFetch(domain:21st.dev)",
+      "Bash(npx puppeteer:*)",
+      "Bash(node -e \":*)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5173/src/components/ui/wave-background.tsx)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(ls /Users/dragos/Code/Personal/cnb-cards/src/assets/team-picture*)",
+      "Bash(git stash:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174)",
+      "Bash(curl -s http://localhost:3001/api/health)",
+      "Bash(pkill -f \"vite --port 5174\")",
+      "Bash(pkill -f \"node src/index.js\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(git rm:*)",
+      "Bash(ls /Users/dragos/Code/Personal/cnb-cards/client/.env*)",
+      "Bash(git reset:*)",
+      "Bash(node setup-stripe.js)",
+      "Bash(git checkout:*)"
+    ]
+  }
+}

@@ -1,0 +1,80 @@
+"filename", "language", "JavaScript JSX", "Markdown", "JavaScript", "TypeScript JSX", "PostCSS", "JSON", "XML", "HTML", "MS SQL", "comment", "blank", "total"
+"/Users/dragos/Code/Personal/cnb-cards/.claude/settings.local.json", "JSON", 0, 0, 0, 0, 0, 37, 0, 0, 0, 0, 1, 38
+"/Users/dragos/Code/Personal/cnb-cards/CLAUDE.md", "Markdown", 0, 131, 0, 0, 0, 0, 0, 0, 0, 0, 20, 151
+"/Users/dragos/Code/Personal/cnb-cards/README.md", "Markdown", 0, 96, 0, 0, 0, 0, 0, 0, 0, 0, 34, 130
+"/Users/dragos/Code/Personal/cnb-cards/client/eslint.config.js", "JavaScript", 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 2, 30
+"/Users/dragos/Code/Personal/cnb-cards/client/index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1, 17
+"/Users/dragos/Code/Personal/cnb-cards/client/package-lock.json", "JSON", 0, 0, 0, 0, 0, 4624, 0, 0, 0, 0, 1, 4625
+"/Users/dragos/Code/Personal/cnb-cards/client/package.json", "JSON", 0, 0, 0, 0, 0, 37, 0, 0, 0, 0, 1, 38
+"/Users/dragos/Code/Personal/cnb-cards/client/postcss.config.js", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/dragos/Code/Personal/cnb-cards/client/public/favicon.svg", "XML", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"/Users/dragos/Code/Personal/cnb-cards/client/public/icons.svg", "XML", 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 1, 25
+"/Users/dragos/Code/Personal/cnb-cards/client/src/App.jsx", "JavaScript JSX", 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 56
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/BeamsBackground.jsx", "JavaScript JSX", 141, 0, 0, 0, 0, 0, 0, 0, 0, 3, 29, 173
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/ComingSoonBanner.jsx", "JavaScript JSX", 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 36
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/Footer.jsx", "JavaScript JSX", 95, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 106
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/Hero.jsx", "JavaScript JSX", 54, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6, 62
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/Navbar.jsx", "JavaScript JSX", 269, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 294
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/ProductCard.jsx", "JavaScript JSX", 113, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 124
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/ProductGrid.jsx", "JavaScript JSX", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 43
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/Testimonials.jsx", "JavaScript JSX", 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 110
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/TrustStrip.jsx", "JavaScript JSX", 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 64
+"/Users/dragos/Code/Personal/cnb-cards/client/src/components/ui/wave-background.tsx", "TypeScript JSX", 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 62, 317
+"/Users/dragos/Code/Personal/cnb-cards/client/src/context/AuthContext.jsx", "JavaScript JSX", 98, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 116
+"/Users/dragos/Code/Personal/cnb-cards/client/src/context/CartContext.jsx", "JavaScript JSX", 42, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9, 53
+"/Users/dragos/Code/Personal/cnb-cards/client/src/context/LanguageContext.jsx", "JavaScript JSX", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 18
+"/Users/dragos/Code/Personal/cnb-cards/client/src/data/mockCards.js", "JavaScript", 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/Users/dragos/Code/Personal/cnb-cards/client/src/hooks/usePageMeta.js", "JavaScript", 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 7, 41
+"/Users/dragos/Code/Personal/cnb-cards/client/src/hooks/useProducts.js", "JavaScript", 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 6, 46
+"/Users/dragos/Code/Personal/cnb-cards/client/src/hooks/useTranslation.js", "JavaScript", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 4, 14
+"/Users/dragos/Code/Personal/cnb-cards/client/src/i18n/translations.js", "JavaScript", 0, 0, 346, 0, 0, 0, 0, 0, 0, 38, 37, 421
+"/Users/dragos/Code/Personal/cnb-cards/client/src/index.css", "PostCSS", 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 3, 17
+"/Users/dragos/Code/Personal/cnb-cards/client/src/lib/api.js", "JavaScript", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/dragos/Code/Personal/cnb-cards/client/src/lib/fees.js", "JavaScript", 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 5, 52
+"/Users/dragos/Code/Personal/cnb-cards/client/src/lib/utils.js", "JavaScript", 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"/Users/dragos/Code/Personal/cnb-cards/client/src/main.jsx", "JavaScript JSX", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 11
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/AboutPage.jsx", "JavaScript JSX", 137, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 149
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/AccountPage.jsx", "JavaScript JSX", 175, 0, 0, 0, 0, 0, 0, 0, 0, 5, 14, 194
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/AdminPage.jsx", "JavaScript JSX", 380, 0, 0, 0, 0, 0, 0, 0, 0, 5, 29, 414
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/AuthPage.jsx", "JavaScript JSX", 176, 0, 0, 0, 0, 0, 0, 0, 0, 1, 16, 193
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/CartPage.jsx", "JavaScript JSX", 191, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 213
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/CheckoutCancelPage.jsx", "JavaScript JSX", 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/CheckoutSuccessPage.jsx", "JavaScript JSX", 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 49
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/ContactPage.jsx", "JavaScript JSX", 268, 0, 0, 0, 0, 0, 0, 0, 0, 9, 13, 290
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/HomePage.jsx", "JavaScript JSX", 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 25
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/NotFoundPage.jsx", "JavaScript JSX", 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 36
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/ResetPasswordPage.jsx", "JavaScript JSX", 129, 0, 0, 0, 0, 0, 0, 0, 0, 3, 11, 143
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/SealedBoxesPage.jsx", "JavaScript JSX", 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 77
+"/Users/dragos/Code/Personal/cnb-cards/client/src/pages/ShopPage.jsx", "JavaScript JSX", 183, 0, 0, 0, 0, 0, 0, 0, 0, 3, 17, 203
+"/Users/dragos/Code/Personal/cnb-cards/client/tailwind.config.js", "JavaScript", 0, 0, 17, 0, 0, 0, 0, 0, 0, 1, 1, 19
+"/Users/dragos/Code/Personal/cnb-cards/client/vite.config.js", "JavaScript", 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"/Users/dragos/Code/Personal/cnb-cards/server/email-templates/reset-password.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 50, 0, 3, 1, 54
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/001_create_products.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 24, 4, 4, 32
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/002_create_orders.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 3, 20
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/003_create_contact.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 1, 10
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/004_add_user_id_to_orders.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 14, 4, 5, 23
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/005_orders_stripe_session_unique.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3
+"/Users/dragos/Code/Personal/cnb-cards/server/migrations/006_decrement_stock_function.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 12
+"/Users/dragos/Code/Personal/cnb-cards/server/package-lock.json", "JSON", 0, 0, 0, 0, 0, 850, 0, 0, 0, 0, 1, 851
+"/Users/dragos/Code/Personal/cnb-cards/server/package.json", "JSON", 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 1, 18
+"/Users/dragos/Code/Personal/cnb-cards/server/setup-stripe.js", "JavaScript", 0, 0, 33, 0, 0, 0, 0, 0, 0, 4, 9, 46
+"/Users/dragos/Code/Personal/cnb-cards/server/src/db.js", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 2, 8
+"/Users/dragos/Code/Personal/cnb-cards/server/src/index.js", "JavaScript", 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 6, 35
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/admin.js", "JavaScript", 0, 0, 73, 0, 0, 0, 0, 0, 0, 5, 15, 93
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/auth.js", "JavaScript", 0, 0, 137, 0, 0, 0, 0, 0, 0, 11, 36, 184
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/checkout.js", "JavaScript", 0, 0, 164, 0, 0, 0, 0, 0, 0, 12, 28, 204
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/contact.js", "JavaScript", 0, 0, 35, 0, 0, 0, 0, 0, 0, 2, 8, 45
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/orders.js", "JavaScript", 0, 0, 43, 0, 0, 0, 0, 0, 0, 1, 8, 52
+"/Users/dragos/Code/Personal/cnb-cards/server/src/routes/products.js", "JavaScript", 0, 0, 34, 0, 0, 0, 0, 0, 0, 2, 11, 47
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emailTemplates.js", "JavaScript", 0, 0, 123, 0, 0, 0, 0, 0, 0, 0, 6, 129
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/README.md", "Markdown", 0, 144, 0, 0, 0, 0, 0, 0, 0, 0, 24, 168
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/base.js", "JavaScript", 0, 0, 217, 0, 0, 0, 0, 0, 0, 25, 18, 260
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/contactConfirmation.js", "JavaScript", 0, 0, 42, 0, 0, 0, 0, 0, 0, 9, 8, 59
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/index.js", "JavaScript", 0, 0, 14, 0, 0, 0, 0, 0, 0, 13, 3, 30
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/newProduct.js", "JavaScript", 0, 0, 71, 0, 0, 0, 0, 0, 0, 14, 20, 105
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/orderReceipt.js", "JavaScript", 0, 0, 66, 0, 0, 0, 0, 0, 0, 14, 13, 93
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/orderShipped.js", "JavaScript", 0, 0, 61, 0, 0, 0, 0, 0, 0, 10, 11, 82
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/passwordReset.js", "JavaScript", 0, 0, 50, 0, 0, 0, 0, 0, 0, 7, 7, 64
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/emails/welcome.js", "JavaScript", 0, 0, 42, 0, 0, 0, 0, 0, 0, 6, 3, 51
+"/Users/dragos/Code/Personal/cnb-cards/server/src/services/mailer.js", "JavaScript", 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"Total", "-", 2958, 371, 1801, 255, 14, 5565, 25, 66, 73, 249, 717, 12094
