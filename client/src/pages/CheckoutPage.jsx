@@ -139,7 +139,7 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
         <h2 className="text-sm font-semibold uppercase tracking-wider text-[#9CA3AF] mb-4">
           Payment
         </h2>
-        <PaymentElement options={{ fields: { billingDetails: { email: "always" } } }} />
+        <PaymentElement options={{ fields: { billingDetails: "auto" } }} />
       </div>
 
       {error && (
