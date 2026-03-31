@@ -136,7 +136,7 @@ export async function checkoutRoutes(fastify) {
       amount,
       currency: "eur",
       payment_method_types: ["card"],
-      receipt_email: customer_email || null,
+      ...(customer_email ? { receipt_email: customer_email } : {}),
       metadata: {
         product_ids: ids.join(","),
         quantities: ids.map((id) => qtyMap[id] || 1).join(","),
