@@ -347,19 +347,26 @@ export function AdminPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-[#4B5563] mb-1">Image</label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
                   <div className="flex items-center gap-3">
                     {form.image_url && (
                       <img src={form.image_url} alt="preview" className="w-12 h-14 object-cover rounded border border-[#E5E7EB] flex-shrink-0" />
                     )}
                     <div className="flex-1">
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        onChange={handleImageUpload}
-                        className="w-full text-sm text-[#4B5563] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-f1-red file:text-white hover:file:bg-red-700 file:cursor-pointer"
-                      />
-                      {uploading && <p className="text-xs text-[#9CA3AF] mt-1">Uploading...</p>}
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploading}
+                        className="px-4 py-2 bg-gray-100 border border-[#E5E7EB] text-sm text-[#4B5563] rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                      >
+                        {uploading ? "Uploading..." : form.image_url ? "Change image" : "Choose image"}
+                      </button>
                       {form.image_url && !uploading && <p className="text-xs text-green-600 mt-1">Image uploaded</p>}
                     </div>
                   </div>
