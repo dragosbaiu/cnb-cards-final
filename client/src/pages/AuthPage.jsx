@@ -19,6 +19,7 @@ export function AuthPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [forgotSent, setForgotSent] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   usePageMeta({
     title: mode === "signin" ? "Sign In — CNB Cards" : mode === "signup" ? "Sign Up — CNB Cards" : "Forgot Password — CNB Cards",
@@ -61,6 +62,7 @@ export function AuthPage() {
     setMode(mode === "signin" ? "signup" : "signin");
     setError(null);
     setForgotSent(false);
+    setAgreedToTerms(false);
   };
 
   return (
@@ -155,9 +157,26 @@ export function AuthPage() {
                     </div>
                   )}
 
+                  {mode === "signup" && (
+                    <label className="flex items-start gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={agreedToTerms}
+                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 rounded border-gray-300 text-f1-red focus:ring-f1-red flex-shrink-0"
+                      />
+                      <span className="text-xs text-[#4B5563] leading-relaxed">
+                        I agree to the{" "}
+                        <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-f1-red hover:underline">Terms & Conditions</a>
+                        {" "}and{" "}
+                        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-f1-red hover:underline">Privacy Policy</a>
+                      </span>
+                    </label>
+                  )}
+
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || (mode === "signup" && !agreedToTerms)}
                     className="w-full py-2.5 bg-f1-red text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? "..." : mode === "signin" ? t("auth_signin_button") : mode === "signup" ? t("auth_signup_button") : t("auth_forgot_submit")}
