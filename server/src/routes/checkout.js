@@ -135,6 +135,7 @@ export async function checkoutRoutes(fastify) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: "eur",
+      payment_method_types: ["card"],
       receipt_email: customer_email || null,
       metadata: {
         product_ids: ids.join(","),
