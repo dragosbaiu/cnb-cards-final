@@ -93,7 +93,8 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
 export async function checkoutRoutes(fastify) {
   // POST /api/checkout/create-intent — validate cart, create PaymentIntent
   fastify.post("/api/checkout/create-intent", { config: { rateLimit: { max: 20, timeWindow: "15 minutes" } } }, async (request, reply) => {
-    const { items, customer_email } = request.body;
+    const { items, customer_email: rawEmail } = request.body;
+    const customer_email = rawEmail?.trim() || null;
 
     if (!items || !items.length) {
       return reply.code(400).send({ error: "Cart is empty" });
