@@ -1,9 +1,14 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-export const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export async function sendEmail({ from, to, subject, html, replyTo }) {
+  const { error } = await resend.emails.send({
+    from: from || "CNB Cards <noreply@cnbcards.ro>",
+    to,
+    subject,
+    html,
+    ...(replyTo ? { reply_to: replyTo } : {}),
+  });
+  if (error) throw new Error(error.message);
+}

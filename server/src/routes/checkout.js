@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { supabase } from "../db.js";
-import { transporter } from "../services/mailer.js";
+import { sendEmail } from "../services/mailer.js";
 import { customerOrderEmail, internalOrderEmail } from "../services/emailTemplates.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -36,7 +36,7 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
     .select("id, driver, year, set_name, condition, price")
     .in("id", ids);
 
-  const productMap = Object.fromEntries(products.map((p) => [p.id, p]));
+  const productMap = Object.fromEntries((products || []).map((p) => [p.id, p]));
   const customerName = shipping?.name || null;
   const customerEmail = receiptEmail || null;
   const shippingAddress = shipping?.address || null;
@@ -70,16 +70,14 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
 
   if (products?.length) {
     const emailJobs = [
-      transporter.sendMail({
-        from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+      sendEmail({
         to: INTERNAL_EMAIL,
         subject: `New Order — ${customerName || customerEmail || "Unknown"}`,
         html: internalOrderEmail({ customerName, customerEmail, items: products, total, shippingAddress }),
       }),
     ];
     if (customerEmail) {
-      emailJobs.push(transporter.sendMail({
-        from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+      emailJobs.push(sendEmail({
         to: customerEmail,
         subject: "Your CNB Cards Order is Confirmed!",
         html: customerOrderEmail({ customerName, items: products, total, shippingAddress }),

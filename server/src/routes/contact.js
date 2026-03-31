@@ -1,5 +1,5 @@
 import { supabase } from "../db.js";
-import { transporter } from "../services/mailer.js";
+import { sendEmail } from "../services/mailer.js";
 
 function escapeHtml(str) {
   return String(str ?? "")
@@ -30,10 +30,10 @@ export async function contactRoutes(fastify) {
     }
 
     // Notify owner — don't block the response
-    transporter.sendMail({
-      from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+    sendEmail({
       to: INTERNAL_EMAIL,
-      subject: `New Contact Message — ${subject || "No subject"}`,
+      subject: `New Contact Message — ${escapeHtml(subject) || "No subject"}`,
+      replyTo: email,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;border:1px solid #E5E7EB;border-radius:8px;">
           <h2 style="margin:0 0 16px;color:#111111;">New Contact Message</h2>
@@ -45,7 +45,6 @@ export async function contactRoutes(fastify) {
           <p style="color:#9CA3AF;font-size:12px;">Reply directly to: ${escapeHtml(email)}</p>
         </div>
       `,
-      replyTo: email,
     }).catch((err) => fastify.log.error("Contact email failed: " + err.message));
 
     return { success: true };

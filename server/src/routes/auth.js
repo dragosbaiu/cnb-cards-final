@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { supabase } from "../db.js";
-import { transporter } from "../services/mailer.js";
+import { sendEmail } from "../services/mailer.js";
 
 function generateDeleteToken(userId) {
   const expiry = Date.now() + 60 * 60 * 1000; // 1 hour
@@ -198,8 +198,7 @@ export async function authRoutes(fastify) {
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const confirmUrl = `${frontendUrl}/confirm-delete?token=${deleteToken}`;
 
-    await transporter.sendMail({
-      from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+    await sendEmail({
       to: data.user.email,
       subject: "Confirm account deletion — CNB Cards",
       html: `
