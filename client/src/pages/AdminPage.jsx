@@ -1,7 +1,28 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { usePageMeta } from "../hooks/usePageMeta";
-
 import { API_URL } from "../lib/api";
+
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const MAX = 900;
+      let { width, height } = img;
+      if (width > MAX || height > MAX) {
+        if (width > height) { height = Math.round(height * MAX / width); width = MAX; }
+        else { width = Math.round(width * MAX / height); height = MAX; }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.82);
+    };
+    img.src = url;
+  });
+}
 
 const EMPTY_FORM = {
   driver: "",
@@ -27,6 +48,8 @@ export function AdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const headers = {
     "Content-Type": "application/json",
@@ -126,6 +149,31 @@ export function AdminPage() {
     setForm({ ...EMPTY_FORM });
     setEditingId(null);
     setShowForm(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const compressed = await compressImage(file);
+      const formData = new FormData();
+      formData.append("file", compressed, "image.jpg");
+      const res = await fetch(`${API_URL}/api/admin/upload-image`, {
+        method: "POST",
+        headers: { "x-admin-key": adminKey },
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Upload failed"); return; }
+      setForm((prev) => ({ ...prev, image_url: data.url }));
+    } catch {
+      setError("Image upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   // Login screen
@@ -298,14 +346,23 @@ export function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#4B5563] mb-1">Image URL</label>
-                  <input
-                    type="text"
-                    value={form.image_url}
-                    onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3 py-2 rounded-lg border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-f1-red/50"
-                  />
+                  <label className="block text-sm font-medium text-[#4B5563] mb-1">Image</label>
+                  <div className="flex items-center gap-3">
+                    {form.image_url && (
+                      <img src={form.image_url} alt="preview" className="w-12 h-14 object-cover rounded border border-[#E5E7EB] flex-shrink-0" />
+                    )}
+                    <div className="flex-1">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleImageUpload}
+                        className="w-full text-sm text-[#4B5563] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-f1-red file:text-white hover:file:bg-red-700 file:cursor-pointer"
+                      />
+                      {uploading && <p className="text-xs text-[#9CA3AF] mt-1">Uploading...</p>}
+                      {form.image_url && !uploading && <p className="text-xs text-green-600 mt-1">Image uploaded</p>}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -336,9 +393,10 @@ export function AdminPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-f1-red text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
+                  disabled={uploading}
+                  className="flex-1 py-2.5 bg-f1-red text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {editingId ? "Save Changes" : "Add Product"}
+                  {uploading ? "Uploading image..." : editingId ? "Save Changes" : "Add Product"}
                 </button>
                 <button
                   type="button"

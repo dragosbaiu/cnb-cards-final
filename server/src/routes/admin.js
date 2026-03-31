@@ -1,4 +1,5 @@
 import { supabase } from "../db.js";
+import multipart from "@fastify/multipart";
 
 function verifyAdmin(request, reply) {
   const key = request.headers["x-admin-key"];
@@ -10,9 +11,35 @@ function verifyAdmin(request, reply) {
 }
 
 export async function adminRoutes(fastify) {
+  await fastify.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB max
+
   // Middleware — check admin key on all /api/admin routes
   fastify.addHook("onRequest", async (request, reply) => {
     if (!verifyAdmin(request, reply)) return;
+  });
+
+  // POST /api/admin/upload-image — upload card image to Supabase Storage
+  fastify.post("/api/admin/upload-image", async (request, reply) => {
+    const data = await request.file();
+    if (!data) return reply.code(400).send({ error: "No file provided" });
+
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowed.includes(data.mimetype)) {
+      return reply.code(400).send({ error: "Only JPEG, PNG and WebP images are allowed" });
+    }
+
+    const buffer = await data.toBuffer();
+    const ext = data.mimetype === "image/png" ? "png" : data.mimetype === "image/webp" ? "webp" : "jpg";
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(filename, buffer, { contentType: data.mimetype, upsert: false });
+
+    if (error) return reply.code(500).send({ error: "Failed to upload image" });
+
+    const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(filename);
+    return { url: urlData.publicUrl };
   });
 
   // GET /api/admin/products — list ALL products (including out of stock)
