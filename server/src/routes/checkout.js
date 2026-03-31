@@ -93,7 +93,7 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
 export async function checkoutRoutes(fastify) {
   // POST /api/checkout/create-intent — validate cart, create PaymentIntent
   fastify.post("/api/checkout/create-intent", { config: { rateLimit: { max: 20, timeWindow: "15 minutes" } } }, async (request, reply) => {
-    const { items } = request.body;
+    const { items, customer_email } = request.body;
 
     if (!items || !items.length) {
       return reply.code(400).send({ error: "Cart is empty" });
@@ -135,12 +135,14 @@ export async function checkoutRoutes(fastify) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: "eur",
+      receipt_email: customer_email || null,
       metadata: {
         product_ids: ids.join(","),
         quantities: ids.map((id) => qtyMap[id] || 1).join(","),
         subtotal_cents: String(Math.round(subtotal * 100)),
         processing_fee_cents: String(Math.round(processingFee * 100)),
         ...(userId ? { user_id: userId } : {}),
+        ...(customer_email ? { customer_email } : {}),
       },
     });
 
@@ -194,7 +196,11 @@ export async function checkoutRoutes(fastify) {
       });
 
       if (paymentIntent.status === "succeeded" && paymentIntent.metadata?.product_ids) {
-        const receiptEmail = paymentIntent.payment_method?.billing_details?.email || null;
+        const receiptEmail =
+        paymentIntent.receipt_email ||
+        paymentIntent.payment_method?.billing_details?.email ||
+        paymentIntent.metadata?.customer_email ||
+        null;
         await processOrder({
           paymentIntentId: id,
           metadata: paymentIntent.metadata,

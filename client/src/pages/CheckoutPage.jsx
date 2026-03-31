@@ -122,7 +122,7 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
         <h2 className="text-sm font-semibold uppercase tracking-wider text-[#9CA3AF] mb-4">
           Payment
         </h2>
-        <PaymentElement />
+        <PaymentElement options={{ fields: { billingDetails: { email: "always" } } }} />
       </div>
 
       {error && (
@@ -154,7 +154,7 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
 export function CheckoutPage() {
   const navigate = useNavigate();
   const { items, total } = useContext(CartContext);
-  const { getAccessToken } = useContext(AuthContext);
+  const { getAccessToken, user } = useContext(AuthContext);
 
   const [clientSecret, setClientSecret] = useState(null);
   const [paymentIntentId, setPaymentIntentId] = useState(null);
@@ -175,7 +175,10 @@ export function CheckoutPage() {
       const res = await fetch(`${API_URL}/api/checkout/create-intent`, {
         method: "POST",
         headers,
-        body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
+        body: JSON.stringify({
+          items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
+          customer_email: user?.email || null,
+        }),
       });
 
       if (!res.ok) {
