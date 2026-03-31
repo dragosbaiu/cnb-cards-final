@@ -1,4 +1,26 @@
+import { createHmac } from "crypto";
 import { supabase } from "../db.js";
+import { transporter } from "../services/mailer.js";
+
+function generateDeleteToken(userId) {
+  const expiry = Date.now() + 60 * 60 * 1000; // 1 hour
+  const payload = Buffer.from(JSON.stringify({ userId, expiry })).toString("base64url");
+  const sig = createHmac("sha256", process.env.ADMIN_SECRET).update(payload).digest("hex");
+  return `${payload}.${sig}`;
+}
+
+function verifyDeleteToken(token) {
+  const dotIndex = (token || "").lastIndexOf(".");
+  if (dotIndex === -1) return null;
+  const payload = token.slice(0, dotIndex);
+  const sig = token.slice(dotIndex + 1);
+  if (!payload || !sig) return null;
+  const expectedSig = createHmac("sha256", process.env.ADMIN_SECRET).update(payload).digest("hex");
+  if (sig !== expectedSig) return null;
+  const { userId, expiry } = JSON.parse(Buffer.from(payload, "base64url").toString());
+  if (Date.now() > expiry) return null;
+  return userId;
+}
 
 export async function authRoutes(fastify) {
   // POST /api/auth/signup
@@ -154,6 +176,59 @@ export async function authRoutes(fastify) {
     if (updateError) {
       return reply.code(400).send({ error: updateError.message });
     }
+
+    return { success: true };
+  });
+
+  // POST /api/auth/request-delete — send confirmation email before deleting account
+  fastify.post("/api/auth/request-delete", async (request, reply) => {
+    const token = request.headers.authorization?.replace("Bearer ", "");
+    if (!token) return reply.code(401).send({ error: "Not authenticated" });
+
+    const { data, error } = await supabase.auth.getUser(token);
+    if (error || !data?.user) return reply.code(401).send({ error: "Invalid token" });
+
+    const deleteToken = generateDeleteToken(data.user.id);
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const confirmUrl = `${frontendUrl}/confirm-delete?token=${deleteToken}`;
+
+    await transporter.sendMail({
+      from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+      to: data.user.email,
+      subject: "Confirm account deletion — CNB Cards",
+      html: `
+        <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;background:#ffffff;">
+          <h2 style="color:#111111;font-size:20px;margin-bottom:8px;">Delete your account</h2>
+          <p style="color:#4B5563;font-size:15px;line-height:1.6;">
+            We received a request to permanently delete your CNB Cards account and all associated data.
+          </p>
+          <p style="color:#4B5563;font-size:15px;line-height:1.6;">
+            If you made this request, click the button below to confirm. This link expires in <strong>1 hour</strong>.
+          </p>
+          <a href="${confirmUrl}" style="display:inline-block;margin:24px 0;padding:12px 28px;background:#E10600;color:#ffffff;font-weight:600;font-size:15px;border-radius:8px;text-decoration:none;">
+            Confirm account deletion
+          </a>
+          <p style="color:#9CA3AF;font-size:13px;">
+            If you did not request this, you can safely ignore this email. Your account will not be deleted.
+          </p>
+        </div>
+      `,
+    });
+
+    return { success: true };
+  });
+
+  // DELETE /api/auth/confirm-delete — verify token and permanently delete account
+  fastify.delete("/api/auth/confirm-delete", async (request, reply) => {
+    const { token } = request.query;
+    const userId = verifyDeleteToken(token);
+
+    if (!userId) {
+      return reply.code(400).send({ error: "Invalid or expired link" });
+    }
+
+    const { error } = await supabase.auth.admin.deleteUser(userId);
+    if (error) return reply.code(400).send({ error: error.message });
 
     return { success: true };
   });

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { Package, LogOut } from "lucide-react";
+import { Package, LogOut, Trash2 } from "lucide-react";
 import { useTranslation } from "../hooks/useTranslation";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { AuthContext } from "../context/AuthContext";
@@ -42,9 +42,30 @@ export function AccountPage() {
     fetchOrders();
   }, [user, getAccessToken]);
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteEmailSent, setDeleteEmailSent] = useState(false);
+
   const handleSignOut = () => {
     signOut();
     navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      const res = await fetch(`${API_URL}/api/auth/request-delete`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${getAccessToken()}` },
+      });
+      if (res.ok) {
+        setDeleteEmailSent(true);
+        setShowDeleteConfirm(false);
+      }
+    } catch {
+      // silently fail
+    }
+    setDeleting(false);
   };
 
   if (authLoading) return null;
@@ -94,6 +115,50 @@ export function AccountPage() {
               <p className="text-sm text-[#9CA3AF] mt-1">{user.email}</p>
             </div>
           </motion.div>
+
+          {/* Delete account */}
+          {deleteEmailSent ? (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-green-50 border border-green-200 rounded-xl px-6 py-5 mb-4 text-sm text-green-800"
+            >
+              {t("account_delete_email_sent")}
+            </motion.div>
+          ) : !showDeleteConfirm ? (
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-red-600 transition-colors"
+              >
+                <Trash2 className="h-4 w-4" />
+                {t("account_delete")}
+              </button>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50 border border-red-200 rounded-xl px-6 py-5 mb-4"
+            >
+              <p className="text-sm text-red-800 mb-4">{t("account_delete_confirm")}</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDeleteAccount}
+                  disabled={deleting}
+                  className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {t("account_delete_confirm_btn")}
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 text-sm font-medium text-[#4B5563] hover:text-[#111111] transition-colors"
+                >
+                  {t("account_delete_cancel")}
+                </button>
+              </div>
+            </motion.div>
+          )}
 
           {/* Order history */}
           <motion.div

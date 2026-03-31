@@ -204,6 +204,11 @@ export const translations = {
     account_order_total: "Total",
     account_order_items: "Items",
     account_order_shipped_to: "Shipped to",
+    account_delete: "Delete Account",
+    account_delete_confirm: "Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.",
+    account_delete_confirm_btn: "Yes, delete my account",
+    account_delete_cancel: "Cancel",
+    account_delete_email_sent: "A confirmation email has been sent. Click the link in the email to permanently delete your account.",
 
     // Conditions
     condition_mint: "Mint",
@@ -415,6 +420,11 @@ export const translations = {
     account_order_total: "Total",
     account_order_items: "Produse",
     account_order_shipped_to: "Livrat la",
+    account_delete: "Șterge Contul",
+    account_delete_confirm: "Ești sigur că vrei să îți ștergi contul? Această acțiune nu poate fi anulată și toate datele tale vor fi eliminate permanent.",
+    account_delete_confirm_btn: "Da, șterge contul meu",
+    account_delete_cancel: "Anulează",
+    account_delete_email_sent: "Un email de confirmare a fost trimis. Apasă linkul din email pentru a șterge permanent contul tău.",
 
     // Conditions
     condition_mint: "Mint",

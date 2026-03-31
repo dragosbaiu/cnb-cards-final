@@ -21,6 +21,7 @@ import { CheckoutPage } from "./pages/CheckoutPage";
 import { TermsPage } from "./pages/TermsPage";
 import { ReturnPolicyPage } from "./pages/ReturnPolicyPage";
 import { PrivacyPage } from "./pages/PrivacyPage";
+import { ConfirmDeletePage } from "./pages/ConfirmDeletePage";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/terms" element={<TermsPage />} />
                     <Route path="/returns" element={<ReturnPolicyPage />} />
                     <Route path="/privacy" element={<PrivacyPage />} />
+                    <Route path="/confirm-delete" element={<ConfirmDeletePage />} />
                     <Route path="*" element={<NotFoundPage />} />
                   </Routes>
                 </>

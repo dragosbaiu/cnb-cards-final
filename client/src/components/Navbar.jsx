@@ -179,7 +179,7 @@ export function Navbar() {
             {/* Account icon */}
             <Link
               to={user ? "/account" : "/auth"}
-              className="hidden md:flex text-[#4B5563] hover:text-[#111111] transition-colors"
+              className="flex text-[#4B5563] hover:text-[#111111] transition-colors"
             >
               <User className="h-5 w-5" />
             </Link>
