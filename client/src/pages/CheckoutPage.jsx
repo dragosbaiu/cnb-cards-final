@@ -44,7 +44,7 @@ function getShippingFee(country) {
 }
 
 // ─── Inner form — must live inside <Elements> to use stripe/elements hooks ───
-function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippingFee, onAddressCountry }) {
+function CheckoutForm({ paymentIntentId, subtotal, processingFee, shippingFee, onAddressCountry, guestEmail, onGuestEmailChange, isLoggedIn }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -101,6 +101,7 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/checkout/success`,
+        ...(!isLoggedIn && guestEmail ? { payment_method_data: { billing_details: { email: guestEmail } } } : {}),
       },
     });
 
@@ -112,6 +113,23 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Email — guests only */}
+      {!isLoggedIn && (
+        <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#9CA3AF] mb-4">
+            Contact
+          </h2>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={guestEmail}
+            onChange={(e) => onGuestEmailChange(e.target.value)}
+            required
+            className="w-full border border-[#E5E7EB] rounded-lg px-3 py-2 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#E10600]"
+          />
+        </div>
+      )}
+
       {/* Shipping address */}
       <div className="bg-white rounded-xl border border-[#E5E7EB] p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-[#9CA3AF] mb-4">
@@ -148,11 +166,13 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
 
       <button
         type="submit"
-        disabled={!stripe || submitting || !addressComplete || shippingFee === null}
+        disabled={!stripe || submitting || !addressComplete || shippingFee === null || (!isLoggedIn && !guestEmail)}
         className="w-full py-3.5 bg-f1-red text-white font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {submitting
           ? "Processing..."
+          : !isLoggedIn && !guestEmail
+          ? "Enter your email to continue"
           : !addressComplete
           ? "Complete your address to continue"
           : shippingFee === null
@@ -177,6 +197,7 @@ export function CheckoutPage() {
   const [paymentIntentId, setPaymentIntentId] = useState(null);
   const [shippingFee, setShippingFee] = useState(null);
   const [initError, setInitError] = useState(null);
+  const [guestEmail, setGuestEmail] = useState("");
 
   const processingFee = getProcessingFee(total);
   const grandTotal = total + processingFee + (shippingFee ?? 0);
@@ -195,6 +216,7 @@ export function CheckoutPage() {
         body: JSON.stringify({
           items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
           customer_email: user?.email || null,
+          // guest email collected after intent creation — updated via confirmPayment
         }),
       });
 
@@ -277,11 +299,13 @@ export function CheckoutPage() {
                 >
                   <CheckoutForm
                     paymentIntentId={paymentIntentId}
-                    items={items}
                     subtotal={total}
                     processingFee={processingFee}
                     shippingFee={shippingFee}
                     onAddressCountry={handleAddressCountry}
+                    guestEmail={guestEmail}
+                    onGuestEmailChange={setGuestEmail}
+                    isLoggedIn={!!user}
                   />
                 </Elements>
               </StripeErrorBoundary>

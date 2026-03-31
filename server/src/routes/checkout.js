@@ -43,7 +43,7 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
   const total = amountReceived / 100;
   const userId = metadata.user_id || null;
 
-  const { data: order } = await supabase
+  const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
       email: customerEmail || "",
@@ -56,6 +56,11 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
     })
     .select("id")
     .single();
+
+  if (orderError) {
+    fastify.log.error("Order insert failed: " + orderError.message + " | code: " + orderError.code);
+    return;
+  }
 
   if (order && products?.length) {
     await supabase.from("order_items").insert(
