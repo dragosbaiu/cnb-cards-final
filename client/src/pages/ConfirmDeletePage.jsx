@@ -28,7 +28,7 @@ export function ConfirmDeletePage() {
         }
       })
       .catch(() => setStatus("error"));
-  }, []);
+  }, [signOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center px-4">

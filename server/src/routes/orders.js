@@ -43,7 +43,7 @@ export async function orderRoutes(fastify) {
       .order("created_at", { ascending: false });
 
     if (error) {
-      return reply.code(500).send({ error: error.message });
+      return reply.code(500).send({ error: "Failed to fetch orders" });
     }
 
     return orders;

@@ -12,7 +12,6 @@ function verifyAdmin(request, reply) {
 export async function adminRoutes(fastify) {
   // Middleware — check admin key on all /api/admin routes
   fastify.addHook("onRequest", async (request, reply) => {
-    if (request.url.startsWith("/api/admin/orders/export")) return; // has own auth
     if (!verifyAdmin(request, reply)) return;
   });
 
@@ -23,7 +22,7 @@ export async function adminRoutes(fastify) {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error) return fastify.httpErrors.internalServerError(error.message);
+    if (error) return fastify.httpErrors.internalServerError("Failed to fetch products");
     return data;
   });
 
@@ -48,7 +47,7 @@ export async function adminRoutes(fastify) {
       .select()
       .single();
 
-    if (error) return fastify.httpErrors.badRequest(error.message);
+    if (error) return fastify.httpErrors.badRequest("Failed to create product");
     reply.code(201);
     return data;
   });
@@ -74,17 +73,13 @@ export async function adminRoutes(fastify) {
       .select()
       .single();
 
-    if (error) return fastify.httpErrors.badRequest(error.message);
+    if (error) return fastify.httpErrors.badRequest("Failed to update product");
     return data;
   });
 
   // GET /api/admin/orders/export — download all orders as CSV (Excel-compatible)
   // Auth via query param ?key= (needed for browser download links)
-  fastify.get("/api/admin/orders/export", { config: { skipAdminHook: true } }, async (request, reply) => {
-    const key = request.headers["x-admin-key"] || request.query.key;
-    if (!key || key !== process.env.ADMIN_SECRET) {
-      return reply.code(401).send({ error: "Unauthorized" });
-    }
+  fastify.get("/api/admin/orders/export", async (request, reply) => {
     const { data: orders, error } = await supabase
       .from("orders")
       .select(`
@@ -103,7 +98,7 @@ export async function adminRoutes(fastify) {
       `)
       .order("created_at", { ascending: false });
 
-    if (error) return reply.code(500).send({ error: error.message });
+    if (error) return reply.code(500).send({ error: "Failed to fetch orders" });
 
     const headers = [
       "Order ID", "Date", "Customer Name", "Email",
@@ -165,7 +160,7 @@ export async function adminRoutes(fastify) {
       .delete()
       .eq("id", id);
 
-    if (error) return fastify.httpErrors.badRequest(error.message);
+    if (error) return fastify.httpErrors.badRequest("Failed to delete product");
     reply.code(204).send();
   });
 }

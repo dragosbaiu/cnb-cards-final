@@ -1,3 +1,12 @@
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function customerOrderEmail({ customerName, items, total, shippingAddress }) {
   const itemRows = items
     .map(
@@ -17,9 +26,9 @@ export function customerOrderEmail({ customerName, items, total, shippingAddress
   const addressBlock = shippingAddress
     ? `
       <p style="margin:0;color:#4B5563;font-size:14px;">
-        ${shippingAddress.line1}${shippingAddress.line2 ? ", " + shippingAddress.line2 : ""}<br>
-        ${shippingAddress.city}, ${shippingAddress.postal_code}<br>
-        ${shippingAddress.country}
+        ${escapeHtml(shippingAddress.line1)}${shippingAddress.line2 ? ", " + escapeHtml(shippingAddress.line2) : ""}<br>
+        ${escapeHtml(shippingAddress.city)}, ${escapeHtml(shippingAddress.postal_code)}<br>
+        ${escapeHtml(shippingAddress.country)}
       </p>`
     : `<p style="color:#9CA3AF;font-size:14px;">Not provided</p>`;
 
@@ -37,7 +46,7 @@ export function customerOrderEmail({ customerName, items, total, shippingAddress
     <div style="padding:32px;">
       <h2 style="margin:0 0 8px;color:#111111;font-size:20px;">Order Confirmed!</h2>
       <p style="margin:0 0 24px;color:#4B5563;font-size:15px;">
-        Hi ${customerName || "there"},<br>
+        Hi ${escapeHtml(customerName) || "there"},<br>
         Thank you for your order. We'll get it packed and shipped as soon as possible.
       </p>
 
@@ -87,9 +96,9 @@ export function internalOrderEmail({ customerName, customerEmail, items, total, 
     .join("");
 
   const addressBlock = shippingAddress
-    ? `${shippingAddress.line1}${shippingAddress.line2 ? ", " + shippingAddress.line2 : ""}
-${shippingAddress.city}, ${shippingAddress.postal_code}
-${shippingAddress.country}`
+    ? `${escapeHtml(shippingAddress.line1)}${shippingAddress.line2 ? ", " + escapeHtml(shippingAddress.line2) : ""}
+${escapeHtml(shippingAddress.city)}, ${escapeHtml(shippingAddress.postal_code)}
+${escapeHtml(shippingAddress.country)}`
     : "Not provided";
 
   return `
@@ -106,8 +115,8 @@ ${shippingAddress.country}`
     <div style="padding:32px;">
       <h3 style="margin:0 0 12px;color:#111111;font-size:15px;font-weight:600;">Customer</h3>
       <p style="margin:0 0 24px;color:#4B5563;font-size:14px;">
-        <strong>${customerName || "N/A"}</strong><br>
-        ${customerEmail || "No email provided"}
+        <strong>${escapeHtml(customerName) || "N/A"}</strong><br>
+        ${escapeHtml(customerEmail) || "No email provided"}
       </p>
 
       <h3 style="margin:0 0 12px;color:#111111;font-size:15px;font-weight:600;">Ship To</h3>

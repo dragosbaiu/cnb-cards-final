@@ -40,7 +40,7 @@ export function AccountPage() {
       setLoadingOrders(false);
     };
     fetchOrders();
-  }, [user, getAccessToken]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);

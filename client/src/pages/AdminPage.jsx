@@ -19,7 +19,7 @@ const EMPTY_FORM = {
 export function AdminPage() {
   usePageMeta({ title: "Admin — CNB Cards", description: "Admin panel" });
 
-  const [adminKey, setAdminKey] = useState(localStorage.getItem("cnb_admin_key") || "");
+  const [adminKey, setAdminKey] = useState(sessionStorage.getItem("cnb_admin_key") || "");
   const [authenticated, setAuthenticated] = useState(false);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export function AdminPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    localStorage.setItem("cnb_admin_key", adminKey);
+    sessionStorage.setItem("cnb_admin_key", adminKey);
     const res = await fetch(`${API_URL}/api/admin/products`, {
       headers: { "x-admin-key": adminKey },
     });
@@ -167,15 +167,26 @@ export function AdminPage() {
             >
               + Add Product
             </button>
-            <a
-              href={`${API_URL}/api/admin/orders/export?key=${encodeURIComponent(adminKey)}`}
-              download
+            <button
+              onClick={async () => {
+                const res = await fetch(`${API_URL}/api/admin/orders/export`, {
+                  headers: { "x-admin-key": adminKey },
+                });
+                if (!res.ok) return;
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `cnb-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
               className="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors"
             >
               Export Orders (CSV)
-            </a>
+            </button>
             <button
-              onClick={() => { setAuthenticated(false); localStorage.removeItem("cnb_admin_key"); }}
+              onClick={() => { setAuthenticated(false); sessionStorage.removeItem("cnb_admin_key"); }}
               className="px-4 py-2 bg-gray-200 text-[#4B5563] text-sm font-semibold rounded-lg hover:bg-gray-300 transition-colors"
             >
               Logout

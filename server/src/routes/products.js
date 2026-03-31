@@ -21,7 +21,7 @@ export async function productRoutes(fastify) {
     const { data, error } = await query;
 
     if (error) {
-      return fastify.httpErrors.internalServerError(error.message);
+      return fastify.httpErrors.internalServerError("Failed to fetch products");
     }
 
     return data;

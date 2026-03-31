@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { supabase } from "../db.js";
 import { transporter } from "../services/mailer.js";
 
@@ -16,7 +16,8 @@ function verifyDeleteToken(token) {
   const sig = token.slice(dotIndex + 1);
   if (!payload || !sig) return null;
   const expectedSig = createHmac("sha256", process.env.ADMIN_SECRET).update(payload).digest("hex");
-  if (sig !== expectedSig) return null;
+  if (sig.length !== expectedSig.length) return null;
+  if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expectedSig))) return null;
   const { userId, expiry } = JSON.parse(Buffer.from(payload, "base64url").toString());
   if (Date.now() > expiry) return null;
   return userId;
@@ -24,11 +25,15 @@ function verifyDeleteToken(token) {
 
 export async function authRoutes(fastify) {
   // POST /api/auth/signup
-  fastify.post("/api/auth/signup", async (request, reply) => {
+  fastify.post("/api/auth/signup", { config: { rateLimit: { max: 5, timeWindow: "15 minutes" } } }, async (request, reply) => {
     const { email, password, name } = request.body;
 
     if (!email || !password) {
       return reply.code(400).send({ error: "Email and password are required" });
+    }
+
+    if (password.length < 8) {
+      return reply.code(400).send({ error: "Password must be at least 8 characters" });
     }
 
     const { data, error } = await supabase.auth.admin.createUser({
@@ -64,7 +69,7 @@ export async function authRoutes(fastify) {
   });
 
   // POST /api/auth/signin
-  fastify.post("/api/auth/signin", async (request, reply) => {
+  fastify.post("/api/auth/signin", { config: { rateLimit: { max: 10, timeWindow: "15 minutes" } } }, async (request, reply) => {
     const { email, password } = request.body;
 
     if (!email || !password) {
@@ -117,7 +122,7 @@ export async function authRoutes(fastify) {
   });
 
   // POST /api/auth/forgot-password — send password reset email
-  fastify.post("/api/auth/forgot-password", async (request, reply) => {
+  fastify.post("/api/auth/forgot-password", { config: { rateLimit: { max: 3, timeWindow: "15 minutes" } } }, async (request, reply) => {
     const { email } = request.body;
 
     if (!email) {
@@ -125,12 +130,13 @@ export async function authRoutes(fastify) {
     }
 
     const origin = request.headers.origin || process.env.FRONTEND_URL || "http://localhost:5173";
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${origin}/reset-password`,
-    });
+    const [{ error }] = await Promise.all([
+      supabase.auth.resetPasswordForEmail(email, { redirectTo: `${origin}/reset-password` }),
+      new Promise((resolve) => setTimeout(resolve, 300)),
+    ]);
 
     if (error) {
-      return reply.code(400).send({ error: error.message });
+      fastify.log.warn("forgot-password error (not revealed to client): " + error.message);
     }
 
     // Always return success — don't reveal whether the email exists
@@ -139,15 +145,15 @@ export async function authRoutes(fastify) {
 
   // POST /api/auth/reset-password — set new password
   // Accepts either token_hash (PKCE flow) or access_token (implicit flow from URL hash)
-  fastify.post("/api/auth/reset-password", async (request, reply) => {
+  fastify.post("/api/auth/reset-password", { config: { rateLimit: { max: 5, timeWindow: "15 minutes" } } }, async (request, reply) => {
     const { token_hash, access_token, new_password } = request.body;
 
     if ((!token_hash && !access_token) || !new_password) {
       return reply.code(400).send({ error: "Token and new_password are required" });
     }
 
-    if (new_password.length < 6) {
-      return reply.code(400).send({ error: "Password must be at least 6 characters" });
+    if (new_password.length < 8) {
+      return reply.code(400).send({ error: "Password must be at least 8 characters" });
     }
 
     let userId;
@@ -181,7 +187,7 @@ export async function authRoutes(fastify) {
   });
 
   // POST /api/auth/request-delete — send confirmation email before deleting account
-  fastify.post("/api/auth/request-delete", async (request, reply) => {
+  fastify.post("/api/auth/request-delete", { config: { rateLimit: { max: 3, timeWindow: "1 hour" } } }, async (request, reply) => {
     const token = request.headers.authorization?.replace("Bearer ", "");
     if (!token) return reply.code(401).send({ error: "Not authenticated" });
 

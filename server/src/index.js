@@ -1,6 +1,8 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
+import rateLimit from "@fastify/rate-limit";
 import { productRoutes } from "./routes/products.js";
 import { adminRoutes } from "./routes/admin.js";
 import { checkoutRoutes } from "./routes/checkout.js";
@@ -8,7 +10,17 @@ import { authRoutes } from "./routes/auth.js";
 import { orderRoutes } from "./routes/orders.js";
 import { contactRoutes } from "./routes/contact.js";
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({
+  logger: {
+    redact: ["req.headers.authorization", 'req.headers["x-admin-key"]', "req.query.key"],
+  },
+});
+
+await fastify.register(helmet, { global: true });
+
+await fastify.register(rateLimit, {
+  global: false, // opt-in per route
+});
 
 await fastify.register(cors, {
   origin: [

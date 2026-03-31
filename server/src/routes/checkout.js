@@ -69,26 +69,32 @@ async function processOrder({ paymentIntentId, metadata, shipping, receiptEmail,
   }
 
   if (products?.length) {
-    Promise.all([
-      customerEmail && transporter.sendMail({
-        from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
-        to: customerEmail,
-        subject: "Your CNB Cards Order is Confirmed!",
-        html: customerOrderEmail({ customerName, items: products, total, shippingAddress }),
-      }),
+    const emailJobs = [
       transporter.sendMail({
         from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
         to: INTERNAL_EMAIL,
         subject: `New Order — ${customerName || customerEmail || "Unknown"}`,
         html: internalOrderEmail({ customerName, customerEmail, items: products, total, shippingAddress }),
       }),
-    ]).catch((err) => fastify.log.error("Email send failed: " + err.message));
+    ];
+    if (customerEmail) {
+      emailJobs.push(transporter.sendMail({
+        from: `"CNB Cards" <${process.env.GMAIL_USER}>`,
+        to: customerEmail,
+        subject: "Your CNB Cards Order is Confirmed!",
+        html: customerOrderEmail({ customerName, items: products, total, shippingAddress }),
+      }));
+    }
+    const results = await Promise.allSettled(emailJobs);
+    results.forEach((r) => {
+      if (r.status === "rejected") fastify.log.error("Email send failed: " + r.reason?.message);
+    });
   }
 }
 
 export async function checkoutRoutes(fastify) {
   // POST /api/checkout/create-intent — validate cart, create PaymentIntent
-  fastify.post("/api/checkout/create-intent", async (request, reply) => {
+  fastify.post("/api/checkout/create-intent", { config: { rateLimit: { max: 20, timeWindow: "15 minutes" } } }, async (request, reply) => {
     const { items } = request.body;
 
     if (!items || !items.length) {
@@ -154,6 +160,11 @@ export async function checkoutRoutes(fastify) {
 
     if (!payment_intent_id || !country) {
       return reply.code(400).send({ error: "payment_intent_id and country are required" });
+    }
+
+    const ALLOWED_COUNTRIES = new Set(["RO","AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","SK","SI","ES","SE","GB","CH","NO","US","CA","AU","JP"]);
+    if (!ALLOWED_COUNTRIES.has(country)) {
+      return reply.code(400).send({ error: "Invalid country code" });
     }
 
     const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);

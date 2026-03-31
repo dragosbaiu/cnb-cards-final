@@ -49,14 +49,21 @@ function CheckoutForm({ paymentIntentId, items, subtotal, processingFee, shippin
     onAddressCountry(country);
 
     // Update PaymentIntent amount on server
-    await fetch(`${API_URL}/api/checkout/update-shipping`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payment_intent_id: paymentIntentId, country }),
-    });
-
-    // Sync Elements with updated PaymentIntent amount
-    if (elements) await elements.fetchUpdates();
+    try {
+      const res = await fetch(`${API_URL}/api/checkout/update-shipping`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payment_intent_id: paymentIntentId, country }),
+      });
+      if (!res.ok) {
+        setError("Failed to calculate shipping. Please try again.");
+        return;
+      }
+      // Sync Elements with updated PaymentIntent amount
+      if (elements) await elements.fetchUpdates();
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    }
   }, [lastCountry, paymentIntentId, elements, onAddressCountry]);
 
   const handleSubmit = async (e) => {
