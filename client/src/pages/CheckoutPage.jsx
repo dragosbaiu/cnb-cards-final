@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback, useContext, Component } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -16,6 +16,22 @@ import { getProcessingFee } from "../lib/fees";
 import { Footer } from "../components/Footer";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+class StripeErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="bg-white rounded-xl border border-red-200 p-6 text-center space-y-3">
+          <p className="text-red-600 font-medium text-sm">Failed to load payment form.</p>
+          <p className="text-[#9CA3AF] text-xs">Please refresh the page and try again.</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const EU_COUNTRIES = new Set(["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","SK","SI","ES","SE"]);
 
@@ -240,32 +256,34 @@ export function CheckoutPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.05 }}
             >
-              <Elements
-                stripe={stripePromise}
-                options={{
-                  clientSecret,
-                  appearance: {
-                    theme: "stripe",
-                    variables: {
-                      colorPrimary: "#E10600",
-                      colorBackground: "#ffffff",
-                      colorText: "#111111",
-                      colorDanger: "#E10600",
-                      borderRadius: "8px",
-                      fontFamily: "Arial, sans-serif",
+              <StripeErrorBoundary>
+                <Elements
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: "stripe",
+                      variables: {
+                        colorPrimary: "#E10600",
+                        colorBackground: "#ffffff",
+                        colorText: "#111111",
+                        colorDanger: "#E10600",
+                        borderRadius: "8px",
+                        fontFamily: "Arial, sans-serif",
+                      },
                     },
-                  },
-                }}
-              >
-                <CheckoutForm
-                  paymentIntentId={paymentIntentId}
-                  items={items}
-                  subtotal={total}
-                  processingFee={processingFee}
-                  shippingFee={shippingFee}
-                  onAddressCountry={handleAddressCountry}
-                />
-              </Elements>
+                  }}
+                >
+                  <CheckoutForm
+                    paymentIntentId={paymentIntentId}
+                    items={items}
+                    subtotal={total}
+                    processingFee={processingFee}
+                    shippingFee={shippingFee}
+                    onAddressCountry={handleAddressCountry}
+                  />
+                </Elements>
+              </StripeErrorBoundary>
             </motion.div>
 
             {/* Right — order summary */}
