@@ -140,6 +140,7 @@ export function AdminPage() {
             value={adminKey}
             onChange={(e) => setAdminKey(e.target.value)}
             placeholder="Admin key"
+            autoComplete="off"
             className="w-full px-4 py-2.5 rounded-lg border border-[#E5E7EB] text-sm text-[#111111] mb-4 focus:outline-none focus:ring-2 focus:ring-f1-red/50"
           />
           <button
