@@ -76,7 +76,7 @@ export function TermsPage() {
 
             <section>
               <h2 className="text-xl font-bold text-[#111111] mb-3">10. Contact</h2>
-              <p>For any questions regarding these terms, please contact us at <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a>.</p>
+              <p>For any questions regarding these terms, please contact us at <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a>.</p>
             </section>
 
           </div>

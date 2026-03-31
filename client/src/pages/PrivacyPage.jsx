@@ -24,7 +24,7 @@ export function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-bold text-[#111111] mb-3">1. Who We Are</h2>
-              <p>CNB Cards (cnbcards.com) is a trading card business based in Romania. We are committed to protecting your personal data in accordance with the EU General Data Protection Regulation (GDPR) and Romanian data protection law. For any privacy-related questions, contact us at <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a>.</p>
+              <p>CNB Cards (cnbcards.ro) is a trading card business based in Romania. We are committed to protecting your personal data in accordance with the EU General Data Protection Regulation (GDPR) and Romanian data protection law. For any privacy-related questions, contact us at <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a>.</p>
             </section>
 
             <section>
@@ -83,7 +83,7 @@ export function PrivacyPage() {
                 <li><strong className="text-[#111111]">Portability</strong> — receive your data in a structured, machine-readable format</li>
                 <li><strong className="text-[#111111]">Objection</strong> — object to processing where we rely on legitimate interests</li>
               </ul>
-              <p className="mt-2">To exercise any of these rights, email us at <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with the Romanian data protection authority (ANSPDCP) at <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="text-f1-red hover:underline">dataprotection.ro</a>.</p>
+              <p className="mt-2">To exercise any of these rights, email us at <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a>. We will respond within 30 days. You also have the right to lodge a complaint with the Romanian data protection authority (ANSPDCP) at <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="text-f1-red hover:underline">dataprotection.ro</a>.</p>
             </section>
 
             <section>
@@ -98,7 +98,7 @@ export function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-bold text-[#111111] mb-3">9. Contact</h2>
-              <p>For any privacy concerns or data requests: <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a></p>
+              <p>For any privacy concerns or data requests: <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a></p>
             </section>
 
           </div>

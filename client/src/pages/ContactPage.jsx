@@ -184,8 +184,8 @@ export function ContactPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-[#111111]">{t("contact_email_label")}</h3>
-                  <a href="mailto:contact@cnbcards.com" className="text-sm text-[#4B5563] hover:text-[#E10600] transition-colors">
-                    contact@cnbcards.com
+                  <a href="mailto:contact@cnbcards.ro" className="text-sm text-[#4B5563] hover:text-[#E10600] transition-colors">
+                    contact@cnbcards.ro
                   </a>
                 </div>
               </div>

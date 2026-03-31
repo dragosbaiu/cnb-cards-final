@@ -87,10 +87,10 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:contact@cnbcards.com"
+                  href="mailto:contact@cnbcards.ro"
                   className="text-sm text-white/60 hover:text-white transition-colors"
                 >
-                  contact@cnbcards.com
+                  contact@cnbcards.ro
                 </a>
               </li>
               <li>

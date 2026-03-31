@@ -49,7 +49,7 @@ export function ReturnPolicyPage() {
             <section>
               <h2 className="text-xl font-bold text-[#111111] mb-3">How to Initiate a Return</h2>
               <ol className="list-decimal pl-6 mt-2 space-y-2">
-                <li>Contact us at <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a> within 14 days of receiving your order.</li>
+                <li>Contact us at <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a> within 14 days of receiving your order.</li>
                 <li>Include your order number and a brief description of the reason for return.</li>
                 <li>We will reply within 2 business days with return instructions.</li>
                 <li>Ship the item back to us using a tracked service. You are responsible for return shipping costs unless the item was sent in error or is defective.</li>
@@ -69,7 +69,7 @@ export function ReturnPolicyPage() {
 
             <section>
               <h2 className="text-xl font-bold text-[#111111] mb-3">Contact</h2>
-              <p>For all return enquiries: <a href="mailto:contact@cnbcards.com" className="text-f1-red hover:underline">contact@cnbcards.com</a></p>
+              <p>For all return enquiries: <a href="mailto:contact@cnbcards.ro" className="text-f1-red hover:underline">contact@cnbcards.ro</a></p>
             </section>
 
           </div>
